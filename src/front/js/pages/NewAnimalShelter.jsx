@@ -2,31 +2,21 @@ import React, { useContext, useState } from "react";
 import { Context } from "../store/appContext";
 import { useNavigate } from "react-router-dom";
 
-export const NewAdoption = () => {
+export const NewAnimalShelter = () => {
     const { store } = useContext(Context);
     const navigate = useNavigate();
 
+    const [shelter_name, setShelter_name] = useState("");
+    const [address, setAdress] = useState("");
+    const [phone_number, setPhone_number] = useState("");
+    const [city, setCity] = useState("");
+    const [email, setEmail] = useState("");
+    const [web_url, setWeb_url] = useState("");
     const [img_url, setImg_url] = useState("");
-    const [how_old, setHow_old] = useState("");
-    const [specie, setSpecie] = useState("");
-    const [race, setRace] = useState("");
-    const [sex, setSex] = useState("");
-    const [province, setProvince] = useState("");
-    const [description, setDescription] = useState("");
+    const [coordinates, setCoordinates] = useState("");
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
     const [file, setFile] = useState(null);
-
-    const sexLabels = {
-        Male: "Macho",
-        Female: "Hembra"
-    };
-
-    const specieLabels = {
-        Dog: "Perro",
-        Cat: "Gato",
-        Other: "Otros"
-    };
 
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
@@ -57,32 +47,35 @@ export const NewAdoption = () => {
 
             uploadedImageUrl = uploadData.img_url;
             setImg_url(uploadedImageUrl);
+            console.log(uploadedImageUrl);
+            
         }
 
-        const response = await fetch(`${process.env.BACKEND_URL}/api/adoptions`, {
+        const response = await fetch(`${process.env.BACKEND_URL}/api/animal-shelters`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${store.token}`,
             },
             body: JSON.stringify({
-                how_old,
-                specie,
-                race,
-                sex,
-                province,
-                description,
-                img_url: uploadedImageUrl || img_url,
+                shelter_name,
+                address,
+                phone_number,
+                city,
+                email,
+                web_url,
+                img_url: uploadedImageUrl,
+                coordinates
             }),
         });
 
         const data = await response.json();
 
         if (response.ok) {
-            setSuccess("¡Adopción creada con éxito! Redirigiendo...");
-            setTimeout(() => navigate("/adopciones"), 2000);
+            setSuccess("Protectora añadida correctamente, por favor espere...");
+            setTimeout(() => navigate("/protectoras"), 2000);
         } else {
-            setError(data.message || "Error al crear la adopción.");
+            setError(data.message || "Error al crear protectora.");
         }
     };
 
@@ -92,7 +85,7 @@ export const NewAdoption = () => {
             onSubmit={handleSubmit}
         >
             <div className="text-center mb-3">
-                <h2>Nueva adopción</h2>
+                <h2>Nueva protectora</h2>
             </div>
             <div>
                 <div className="input-group mb-3">
@@ -101,84 +94,67 @@ export const NewAdoption = () => {
                     {img_url && <img src={img_url} alt="Subida" style={{ maxWidth: "300px" }} />}
                 </div>
                 <div className="input-group mb-3">
-                    <span>Edad
+                    <span>Nombre protectora
                         <input
-                            onChange={(e) => setHow_old(e.target.value)}
-                            type="number"
-                            min="0"
-                            step="1"
-                            value={how_old}
-                            className="form-control"
-                            required
-                        />
-                    </span>
-                </div>
-                <div className="input-group mb-3">
-                    <span>Especie
-                        <div className="dropdown">
-                            <button
-                                className="btn btn-primary dropdown-toggle"
-                                type="button"
-                                data-bs-toggle="dropdown"
-                                aria-expanded="false"
-                            >
-                                {specieLabels[specie] || "Selecciona"}
-                            </button>
-                            <ul className="dropdown-menu">
-                                <li><span className="dropdown-item" onClick={() => setSpecie("Dog")}>Perro</span></li>
-                                <li><span className="dropdown-item" onClick={() => setSpecie("Cat")}>Gato</span></li>
-                                <li><span className="dropdown-item" onClick={() => setSpecie("Other")}>Otros</span></li>
-                            </ul>
-                        </div>
-                    </span>
-                </div>
-                <div className="input-group mb-3">
-                    <span>Raza
-                        <input
-                            onChange={(e) => setRace(e.target.value)}
+                            onChange={(e) => setShelter_name(e.target.value)}
                             type="text"
-                            value={race}
+                            value={shelter_name}
                             className="form-control"
                             required
                         />
                     </span>
                 </div>
                 <div className="input-group mb-3">
-                    <span>Sexo
-                        <div className="dropdown">
-                            <button
-                                className="btn btn-primary dropdown-toggle"
-                                type="button"
-                                data-bs-toggle="dropdown"
-                                aria-expanded="false"
-                            >
-                                {sexLabels[sex] || "Selecciona"}
-                            </button>
-                            <ul className="dropdown-menu">
-                                <li><span className="dropdown-item" onClick={() => setSex("Male")}>Macho</span></li>
-                                <li><span className="dropdown-item" onClick={() => setSex("Female")}>Hembra</span></li>
-                            </ul>
-                        </div>
-                    </span>
-                </div>
-                <div className="input-group mb-3">
-                    <span>Provincia
-                        <input
-                            onChange={(e) => setProvince(e.target.value)}
+                    <span>Dirección
+                    <input
+                            onChange={(e) => setAdress(e.target.value)}
                             type="text"
-                            value={province}
+                            value={address}
                             className="form-control"
                             required
                         />
                     </span>
                 </div>
                 <div className="input-group mb-3">
-                    <span>Descripción
+                    <span>Teléfono de contacto
+                        <input
+                            onChange={(e) => setPhone_number(e.target.value)}
+                            type="text"
+                            value={phone_number}
+                            className="form-control"
+                            required
+                        />
+                    </span>
+                </div>
+                <div className="input-group mb-3">
+                    <span>Ciudad
+                    <input
+                            onChange={(e) => setCity(e.target.value)}
+                            type="text"
+                            value={city}
+                            className="form-control"
+                            required
+                        />
+                    </span>
+                </div>
+                <div className="input-group mb-3">
+                    <span>Email
+                        <input
+                            onChange={(e) => setEmail(e.target.value)}
+                            type="text"
+                            value={email}
+                            className="form-control"
+                            required
+                        />
+                    </span>
+                </div>
+                <div className="input-group mb-3">
+                    <span>Web
                         <textarea
-                            onChange={(e) => setDescription(e.target.value)}
-                            value={description}
+                            onChange={(e) => setWeb_url(e.target.value)}
+                            type="text"
+                            value={web_url}
                             className="form-control"
-                            required
                         />
                     </span>
                 </div>

@@ -6,8 +6,6 @@ export const AdoptionDetails = () => {
 	const { store } = useContext(Context)
 	const host = process.env.BACKEND_URL;
 	const rutaImagenes = host + "";
-	console.log(store.selectedAdoption);
-	
 
 	return (
 		<div className="container">
@@ -29,7 +27,7 @@ export const AdoptionDetails = () => {
 							<h5 className="card-title mb-2">{store.selectedAdoption.province}</h5>
 							<h5 className="card-title mb-2">{store.selectedAdoption.description}</h5>
 							<h5 className="card-title mb-2">{store.selectedAdoption.adoption_priority}</h5>
-							<div>
+							<div className="d-none">
 								<Link to="/contact-form">
 									<button className="btn btn-primary">Contactar</button>
 								</Link>

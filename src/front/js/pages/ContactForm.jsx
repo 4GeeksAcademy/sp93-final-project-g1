@@ -3,6 +3,7 @@ import { Context } from "../store/appContext.js";
 import emailjs from "emailjs-com";
 
 export const ContactForm = () => {
+    const { store } = useContext(Context);
 
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
@@ -69,5 +70,5 @@ export const ContactForm = () => {
                 </div>
             </div>
         </form>
-    )
-}
+    );
+};

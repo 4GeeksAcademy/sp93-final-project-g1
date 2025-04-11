@@ -27,13 +27,15 @@ export const Adopciones = () => {
 						<div className="card">
 							<div className="card-body">
 								<h5 className="card-title mb-2">{iterator.status}</h5>
-								<img class="card-img-top" src={`${rutaImagenes}/${iterator.img_url}`} alt="Card image cap"/>
+								<img className="card-img-top" src={`${rutaImagenes}/${iterator.img_url}`} alt="Card image cap"/>
 								<h5 className="card-title mb-2">{iterator.province}</h5>
 								<Link to="/adoption-details">
 									<button
 										type="button"
 										className="btn btn-primary mb-2"
-										onClick={() => actions.getAdoptions(iterator.id)}>
+										onClick={() => {
+											actions.getAdoptions(iterator.id);
+										}}>
 										Detalles
 									</button>
 								</Link>

@@ -1,7 +1,7 @@
 """
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
-from flask import Flask, request, jsonify, url_for, Blueprint
+from flask import Flask, request, jsonify, url_for, Blueprint, current_app
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from api.models import db, Users, News, Adoptions, SosCases, Donations, Veterinary, AnimalShelter
@@ -10,10 +10,7 @@ from flask_jwt_extended import jwt_required
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import get_jwt
 import os
-from flask import current_app
 from werkzeug.utils import secure_filename
-
-
 
 api = Blueprint('api', __name__)
 CORS(api)  # Allow CORS requests to this API
@@ -377,9 +374,10 @@ def donation(donation_id):
         response_body["message"] = "Donation data retireved successfully"
         response_body["results"] = row.serialize()
         return response_body, 200
+
     
-"""@api.route("/donations/<int:donation_id>", methods=["DELETE"])
-def donation(donation_id):
+@api.route("/donations/<int:donation_id>", methods=["DELETE"])
+def delete_donation(donation_id):
     response_body = {}
     row = db.session.execute(db.select(Donations).where(Donations.id == donation_id)).scalar()
     if row == None:
@@ -390,7 +388,7 @@ def donation(donation_id):
         db.session.commit()
         response_body["message"] = "Donation deleted successfully"
         response_body["results"] = {}
-        return response_body, 200"""
+        return response_body, 200
 
 
 @api.route("/animal-shelters", methods=["GET", "POST"])
@@ -409,7 +407,8 @@ def animal_shelters():
                                     phone_number = data.get("phone_number"),
                                     city = data.get("city"),
                                     email = data.get("email"),
-                                    web_url = data.get("web_url"))
+                                    web_url = data.get("web_url"),
+                                    img_url = data.get("img_url"))
         db.session.add(new_shelter)
         db.session.commit()
         response_body["message"] = "Shelter data added successfully"
@@ -462,7 +461,8 @@ def veterinaries():
                                     phone_number = data.get("phone_number"),
                                     city = data.get("city"),
                                     email = data.get("email"),
-                                    web_url = data.get("web_url"))
+                                    web_url = data.get("web_url"),
+                                    img_url = data.get("img_url"))
         db.session.add(new_veterinary)
         db.session.commit()
         response_body["message"] = "Veterinary data added successfully"
@@ -499,24 +499,26 @@ def veterinary(veterinary_id):
         return response_body, 200
 
 
-# Función auxiliar para validar archivos permitidos
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in current_app.config['ALLOWED_EXTENSIONS']
 
-# Endpoint para subir imágenes
-@api.route('/upload', methods=['POST'])
+
+@api.route("/upload", methods=["POST"])
 def upload_image():
+    response_body = {}
     if 'image' not in request.files:
-        return jsonify({'message': 'No file part'}), 400
+        response_body["message"] = "No file part"
+        return response_body, 400
     file = request.files['image']
-
     if file.filename == '':
-        return jsonify({'message': 'No selected file'}), 400
-
+        response_body["message"] = "No selected file"
+        return response_body, 400
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
         file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
         img_url = f'{filename}'
-        return jsonify({'img_url': img_url}), 200
+        response_body["img_url"] = img_url
+        return response_body, 200
     else:
-        return jsonify({'message': 'File not allowed'}), 400
+        response_body["message"] = "File not allowed"
+        return response_body, 400

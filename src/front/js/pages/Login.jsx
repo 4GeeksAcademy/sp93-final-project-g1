@@ -33,11 +33,6 @@ export const Login = () => {
 				<h2 className="text-center mb-3">Login</h2>
 				<div className="text-center mt-4">
 					<div className="input-group mb-3">
-						<span>Username
-							<input onChange={(e) => setUser(e.target.value)} type="text" value={user} className="form-control" placeholder="Username" required />
-						</span>
-					</div>
-					<div className="input-group mb-3">
 						<span>Email
 							<input onChange={(e) => setEmail(e.target.value)} type="email" value={email} className="form-control" placeholder="Email" required />
 						</span>

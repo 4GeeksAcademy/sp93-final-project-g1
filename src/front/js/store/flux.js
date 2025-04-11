@@ -45,7 +45,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			setUser: (newUser) => { setStore({ user: newUser }) },
 			setNotice: (newNotice) => { setStore({ notice: newNotice }) },
-			setAnimalShelter: (newAnimalShelter) => { setStore({ animalShelter: newAnimalShelter }) },
+			setAnimalShelter: (newAnimalShelter) => { setStore({ animalShelter: newAnimalShelter }) },		
 			setAdoption: (newAdoption) => { setStore({ adoptions: newAdoption }) },
 			setVeterinary: (newVeterinary) => { setStore({ veterinary: newVeterinary }) },
 			setSosCase: (newSosCase) => { setStore({ sosCase: newSosCase }) },

@@ -8,7 +8,7 @@ db = SQLAlchemy()
 class Users(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
-    user_name = db.Column(db.String(100), unique=True, nullable=False)
+    user_name = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
     contact_person = db.Column(db.String(100))
@@ -150,7 +150,7 @@ class AnimalShelter(db.Model):
     city = db.Column(db.String)
     email = db.Column(db.String)
     web_url = db.Column(db.String)
-    img_url = db.Column(db.String)
+    img_url = db.Column(db.String(255))
     coordinates = db.Column(db.Float)
 
     def serialize(self):

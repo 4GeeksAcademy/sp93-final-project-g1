@@ -24,12 +24,14 @@ import { ListadoNoticias } from "./pages/ListadoNoticias.jsx";
 import { CrearNoticia } from "./pages/CrearNoticia.jsx";
 import { DetalleNoticia } from "./pages/DetalleNoticia.jsx"
 import { ProtectorasVistaDetalle } from "./pages/ProtectorasVistaDetalle.jsx"
+import { NewVeterinary } from "./pages/NewVeterinary.jsx"
 
 
 import { SignUp } from "./pages/SignUp.jsx";
 import { NewAdoption } from "./pages/NewAdoption.jsx";
 import { AdoptionDetails } from "./pages/AdoptionDetails.jsx";
 import { ContactForm } from "./pages/ContactForm.jsx";
+import { NewAnimalShelter } from "./pages/NewAnimalShelter.jsx";
 
 const basename = process.env.BASENAME || "home";
 console.log(basename);
@@ -70,6 +72,8 @@ const Layout = () => {
                         <Route element={<VeterinariasVistaDetalle />} path="/vista-detalles" />
                         <Route element={<ProtectorasVistaDetalle />} path="/animal-shelter-detail" />
                         <Route element={<ContactForm />} path="/contact-form"/>
+                        <Route element={<NewAnimalShelter />} path="/new-animal-shelter" />
+                        <Route element={<NewVeterinary />} path="/new-veterinary" />
                     </Routes>
                     <Footer />
                 </ScrollToTop>
